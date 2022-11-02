@@ -9,8 +9,13 @@ import {
   Slide,
   useToast,
   Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
-import Head from "next/head";
 import NavBar from "components/NavBar";
 import UpgradeSection from "../../sections/shopSection";
 import SendNoSection from "../../sections/sendCrypto";
@@ -19,16 +24,29 @@ import SideNav from "components/sidenav";
 import RecieveCryptoSection from "sections/recieveCrypto";
 import { useRouter } from "next/router";
 
-const BTC = () => {
+const Algo = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [closeUpgrade, setCloseUpgrade] = useState(true);
   const [closeSend, setCloseSend] = useState(true);
-  const { user, balance, logout }: any = useContext(GlobalContext);
+  const { user, balance, logout, inTransactions }: any =
+    useContext(GlobalContext);
   const [page, setPage] = useState("");
   let router = useRouter();
   function navigate(path: string) {
     router.push(path);
   }
+  const [transactions, setTransactions] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!transactions) {
+      if (inTransactions) {
+        const x = inTransactions;
+        if (x.length > 0) {
+          setTransactions(x);
+        }
+      }
+    }
+  });
   const toast = useToast();
   useEffect(() => {
     if (!isOpen) {
@@ -48,6 +66,10 @@ const BTC = () => {
       setCloseSend(true);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    console.log(inTransactions);
+  });
 
   return (
     <>
@@ -206,38 +228,15 @@ const BTC = () => {
                 </Container>
               </Box>
             </Stack>
-            <VStack
-              spacing={4}
-              width="100%"
-              pt={9}
-              alignItems="center"
-              textAlign="center"
-            >
-              <Text as="h6" fontSize="19px" fontWeight="700" opacity={0.7}>
-                Transcations
-              </Text>
 
-              <Text px={3} fontSize="15px" fontWeight="700" opacity={0.7}>
-                All your Algorand Transcations will show up here
-              </Text>
+            {/* Transactions will show up here */}
 
-              <Box
-                as="button"
-                px={4}
-                fontSize="14px"
-                fontWeight="600"
-                opacity="0.7"
-                border=" solid 1px rgb(12, 108, 242)"
-                color="rgb(12, 108, 242)"
-                borderRadius="8px"
-                height="40px"
-                _hover={{
-                  backgroundColor: "rgb(10, 86, 193)",
-                }}
-              >
-                Recieve ALGO Now
-              </Box>
-            </VStack>
+            {inTransactions &&
+              (inTransactions.length > 0 ? (
+                <MyTransactions />
+              ) : (
+                <NoTransactions />
+              ))}
           </VStack>
         </Box>
 
@@ -266,4 +265,101 @@ const BTC = () => {
   );
 };
 
-export default BTC;
+export default Algo;
+
+const MyTransactions = () => {
+  const { user, balance, logout, inTransactions, outTransactions }: any =
+    useContext(GlobalContext);
+  const [transactions, setTransactions] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!transactions) {
+      if (inTransactions) {
+        const x = inTransactions;
+        if (x.length > 0) {
+          setTransactions(x);
+        }
+      }
+    }
+  });
+
+  return (
+    <Box w="100%" maxW="700px">
+      <TableContainer>
+        <Table variant="simple" borderRadius={12}>
+          <Thead color="blue.200">
+            <Tr>
+              <Td>S/N</Td>
+              <Td>txID</Td>
+              <Td>Sender</Td>
+              {/* <Td>Reciever</Td> */}
+              <Td isNumeric>Amount</Td>
+              <Td isNumeric>Fee</Td>
+            </Tr>
+          </Thead>
+
+          {transactions &&
+            transactions.map((x: any, index: number) => (
+              <Tbody key={x.id}>
+                <Tr>
+                  {/* <Td>{x.created.toDate()}</Td> */}
+                  <Td>{index + 1}</Td>
+                  <Td isTruncated={true} w="30px">
+                    {x.id}
+                  </Td>
+                  <Td isTruncated={true} w="30px">
+                    {x.sender ? x.sender : "me"}
+                  </Td>
+                  {/* <Td isTruncated={true} w="30px">
+                    {x.reciever ? x.reciever : "me"}
+                  </Td> */}
+                  <Td>{x.amount}</Td>
+                  <Td>{x.fee}</Td>
+                </Tr>
+              </Tbody>
+            ))}
+        </Table>
+      </TableContainer>
+      ;
+    </Box>
+  );
+};
+
+const NoTransactions = () => {
+  return (
+    <>
+      <VStack
+        spacing={4}
+        width="100%"
+        pt={9}
+        alignItems="center"
+        textAlign="center"
+      >
+        <Text as="h6" fontSize="19px" fontWeight="700" opacity={0.7}>
+          Transcations
+        </Text>
+
+        <Text px={3} fontSize="15px" fontWeight="700" opacity={0.7}>
+          All your Algorand Transcations will show up here
+        </Text>
+
+        <Box
+          as="button"
+          px={4}
+          fontSize="14px"
+          fontWeight="600"
+          opacity="0.7"
+          border=" solid 1px rgb(12, 108, 242)"
+          color="rgb(12, 108, 242)"
+          borderRadius="8px"
+          height="40px"
+          _hover={{
+            backgroundColor: "rgb(10, 86, 193)",
+          }}
+        >
+          Recieve ALGO Now
+        </Box>
+      </VStack>
+    </>
+  );
+};

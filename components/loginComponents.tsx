@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Container,
   Divider,
@@ -78,7 +79,7 @@ export const LoginBody = (props: { children: any }) => {
       maxW="600px"
       alignSelf="center"
       h={430}
-     mb={8}
+      mb={8}
     >
       <Tabs variant="soft-rounded" colorScheme="blue">
         <TabList px={3} pt={4} display="flex" justifyContent="center">
@@ -101,12 +102,15 @@ export const LoginBody = (props: { children: any }) => {
           </Tab>
           <Tab>
             {" "}
-            <Box
+            {/* <Box
               as="img"
               alt="grey wallet"
               src="/exchange-grayscale.svg"
               mb={0}
-            />
+            /> */}
+            <Avatar bgColor="teal" p={0} mb={0}>
+              <Box as="img" src="/shop.svg" />
+            </Avatar>
             <Text color="grey" fontWeight="bold" fontSize="xl" ml={2}>
               Seller
             </Text>
@@ -130,6 +134,7 @@ export const LoginBody = (props: { children: any }) => {
         </Text>
 
         <Box
+          cursor="pointer"
           onClick={() => navigate("/signup")}
           fontSize="lg"
           mt={1}

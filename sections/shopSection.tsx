@@ -7,7 +7,9 @@ import {
   Divider,
   Text,
   Button,
+  Avatar,
 } from "@chakra-ui/react";
+import CustomShopLoading from "components/shopLoader";
 
 const UpgradeSection = (props: { onToggle: () => void }) => {
   const [pageIndex, setPageIndex] = useState<number>(0);
@@ -52,7 +54,7 @@ const UpgradeSection = (props: { onToggle: () => void }) => {
                 type="submit"
                 width="full"
                 height="48px"
-                bg="blue"
+                bg="teal"
                 mt={4}
                 loadingText="Submitting"
                 colorScheme={"blue.500"}
@@ -77,7 +79,9 @@ const AboutShop = (props: { onToggle: () => void }) => {
     <>
       <Box w="100%">
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box as="img" src="/blue-verified.svg" />
+          <Avatar bgColor="teal" p={0}>
+            <Box as="img" src="/shop.svg" />
+          </Avatar>
 
           <IconButton
             size={"md"}
@@ -179,7 +183,7 @@ const AboutShop = (props: { onToggle: () => void }) => {
               </Box>
 
               <Box>
-                <CheckIcon color="blue.500" />
+                <CheckIcon color="teal" />
               </Box>
             </Box>
 
@@ -211,7 +215,7 @@ const AboutShop = (props: { onToggle: () => void }) => {
               </Box>
 
               <Box>
-                <CheckIcon color="blue.500" />
+                <CheckIcon color="teal" />
               </Box>
             </Box>
           </Box>
@@ -227,7 +231,9 @@ const MarketPlace = (props: { onToggle: () => void }) => {
       <Box w="100%">
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box>
-            <Box as="img" src="/blue-verified.svg" />
+            <Avatar bgColor="teal" p={0}>
+              <Box as="img" src="/shop.svg" />
+            </Avatar>
             <Heading
               my={3}
               mr={3}
@@ -256,7 +262,9 @@ const MarketPlace = (props: { onToggle: () => void }) => {
           </Box>
         </Box>
 
-        <Box overflow="auto"></Box>
+        <Box overflow="auto">
+          <CustomShopLoading />
+        </Box>
       </Box>
     </>
   );

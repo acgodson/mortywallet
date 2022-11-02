@@ -7,7 +7,7 @@ import { GlobalContext } from "../../contexts/contexts";
 import CustomLoading from "components/loader";
 
 const HomePage = () => {
-  const { user }: any = useContext(GlobalContext);
+  const { user, account }: any = useContext(GlobalContext);
 
   let router = useRouter();
   function navigate(path: string) {
@@ -37,6 +37,8 @@ const HomePage = () => {
       fetchUser();
     }
   }, [user]);
+
+  console.log(account);
 
   return (
     <>

@@ -14,7 +14,7 @@ import { MotionBox } from "components/motion";
 
 export default function PieChartSection(props: { in: number; out: number }) {
   const sample = [
-    { name: "Total Spending", value: 10000, color: "#F28066" },
+    { name: "Total Spending", value: props.out, color: "#F28066" },
     { name: "Total money recieved", value: props.in, color: "#0367A6" },
   ];
 

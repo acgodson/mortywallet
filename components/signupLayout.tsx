@@ -23,8 +23,12 @@ export const SignupLayout = (props: { children: any }) => {
         {props.children}
 
         <Box width="100%" display={["none", "none", "block"]}>
-          <Box>
-            <Text>Welcome to New Money</Text>
+          <Box top="25%" right="15%" position="absolute">
+            <Text variant="h1" fontSize="60px" fontWeight="bold" color="white">
+              Your Best Money
+              <br />
+              is on Morty...
+            </Text>
           </Box>
         </Box>
       </Container>

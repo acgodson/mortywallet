@@ -1,5 +1,5 @@
 import { SafeEventEmitterProvider } from "@web3auth/base";
-import algosdk from "algosdk";
+import algosdk, { waitForConfirmation } from "algosdk";
 import { ALGO_API_KEY } from "../config";
 
 const algodToken = {
@@ -70,29 +70,29 @@ export default class AlgorandRPC {
     return txId;
   };
 
-  signAndSendTransaction = async (): Promise<any> => {
+  signAndSendTransaction = async (
+    receiver: string,
+    note: string,
+    amount: number
+  ): Promise<any> => {
     try {
       const keyPair = await this.getAlgorandKeyPair();
       const client = await this.makeClient();
       const params = await client.getTransactionParams().do();
       const enc = new TextEncoder();
-      const message = enc.encode("Web3Auth says hello!");
-
-      // You need to have some funds in your account to send a transaction
-      // You can get some testnet funds here: https://bank.testnet.algorand.network/
-
+      const message = enc.encode(note);
       const txn = algosdk.makePaymentTxnWithSuggestedParams(
         keyPair.addr, // sender
-        keyPair.addr, // receiver
-        1000,
+        receiver, // receiver
+        amount,
         undefined,
         message,
         params
       );
+
       let signedTxn = algosdk.signTransaction(txn, keyPair.sk);
-
       const txHash = await client.sendRawTransaction(signedTxn.blob).do();
-
+      console.log(txHash);
       return txHash.txId;
     } catch (error) {
       console.log(error);
@@ -123,6 +123,20 @@ export default class AlgorandRPC {
       console.log(e);
       console.trace();
     }
+  };
+
+  confirmTransaction = async (txID: string): Promise<any> => {
+    const client = await this.makeClient();
+    // Wait for confirmation
+    let confirmedTxn = await waitForConfirmation(client, txID, 4);
+    //Get the completed Transaction
+    const txinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+    var notes = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+    const response = {
+      tx: txinfo,
+      note: notes,
+    };
+    return response;
   };
 
   fetchSellersAssets = async (address: string): Promise<any> => {

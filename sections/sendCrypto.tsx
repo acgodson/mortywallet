@@ -10,8 +10,11 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
-import RPC from "../utils/algorandRPC";
+import Link from "next/link";
+import CustomLoading from "components/loader";
+// import RPC from "../utils/algorandRPC";
 
 const SendNoSection = (props: {
   onToggle: () => void;
@@ -25,7 +28,7 @@ const SendNoSection = (props: {
     <Box
       width="100%"
       position="absolute"
-      overflow="auto"
+      overflow="hidden"
       minH="100vh"
       bgColor="blackAlpha.500"
       top="0"
@@ -39,7 +42,7 @@ const SendNoSection = (props: {
         pt={2}
         pb={10}
       >
-        {balance < 5 ? (
+        {balance < 0 ? (
           <NoMoney onToggle={props.onToggle} onRecieve={props.onToggle} />
         ) : (
           <SendMoney
@@ -60,17 +63,53 @@ const SendMoney = (props: {
   balance: number;
   rate: number;
 }) => {
-  const { provider, account, balance, defaultRate }: any =
-    useContext(GlobalContext);
+  const {
+    provider,
+    account,
+    balance,
+    defaultRate,
+    signAndSendTransaction,
+  }: any = useContext(GlobalContext);
   const [amount, setAmount] = useState<number>(0);
   const [address, setAddress] = useState<string>("");
-  const [submitting, setSubmitting] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [verifiedAddress, setVerifiedAddress] = useState(false);
-  const rpc = new RPC(provider);
+  const [note, setNote] = useState<string>(" ");
+  const [txtID, setTxtID] = useState<string | null>(null);
+
+  const toast = useToast();
+
+  // const rpc = new RPC(provider);
 
   // async function checkAddress() {
   //   await rpc.isAlgorandAddress(address);
   // }
+
+  async function SendTransaction() {
+    try {
+      setSubmitting(true);
+      const algo = amount / props.rate;
+      const xAlgo = Math.round(algo * 100000);
+
+      console.log(xAlgo);
+
+      const id = await signAndSendTransaction(address, note, xAlgo);
+
+      if (id) {
+        setTxtID(id);
+        setSubmitting(false);
+      }
+    } catch (e) {
+      setSubmitting(false);
+      toast({
+        title: "Error",
+        description: e,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }
 
   console.log(account);
 
@@ -106,94 +145,177 @@ const SendMoney = (props: {
           icon={<CloseIcon />}
           aria-label={"Open Menu"}
           display={["inherit", "inherit", "inherit"]}
-          onClick={props.onToggle}
+          onClick={() => {
+            props.onToggle();
+            setTxtID(null);
+          }}
         />
       </Box>
 
-      <FormControl mt={10} px={3}>
-        <FormLabel color="black.200" ml={1.5} key={"address"}>
-          Address
-        </FormLabel>
-
-        <Input
-          id="address"
-          color="grey"
-          fontSize="sm"
-          type={"text"}
-          placeholder="Enter Algo address"
-          required={true}
-          readOnly={false}
-          value={address}
-          size="lg"
-          onChange={(event) => setAddress(event.currentTarget.value)}
-          bg="whitesmoke"
-        />
-      </FormControl>
-
-      <FormControl mt={10} px={3}>
-        <FormLabel color="black.200" ml={1.5} key={"amount"}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box>
-              Balance:
-              <Box as="span" color="grey">
-                {" "}
-                ${props.balance}
-              </Box>
-            </Box>
-            <Button color="blue" bgColor="transparent" onClick={() => useMax()}>
-              Use Max
-            </Button>
-          </Box>
-        </FormLabel>
-
-        <Input
-          id="amount"
-          color="grey"
-          fontSize="sm"
-          type={"number"}
-          placeholder="Enter Amount"
-          required={true}
-          readOnly={false}
-          value={amount}
-          size="lg"
-          onChange={(e) => setAmount(parseInt(e.currentTarget.value))}
-          bg="whitesmoke"
-        />
-      </FormControl>
-
-      {amount > props.balance ? (
-        <Text ml={3} my={0} fontSize="xs" color="red">
-          Insufficent Balance
-        </Text>
+      {submitting ? (
+        <CustomLoading />
       ) : (
-        <Box />
+        <>
+          {!txtID && (
+            <Box>
+              <FormControl mt={10} px={3}>
+                <FormLabel color="black.200" ml={1.5} key={"address"}>
+                  Address
+                </FormLabel>
+
+                <Input
+                  id="address"
+                  color="grey"
+                  fontSize="sm"
+                  type={"text"}
+                  placeholder="Enter Algo address"
+                  required={true}
+                  readOnly={false}
+                  value={address}
+                  size="lg"
+                  onChange={(event) => setAddress(event.currentTarget.value)}
+                  bg="whitesmoke"
+                />
+              </FormControl>
+
+              <FormControl mt={10} px={3}>
+                <FormLabel color="black.200" ml={1.5} key={"amount"}>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box>
+                      Balance:
+                      <Box as="span" color="grey">
+                        {" "}
+                        ${props.balance}
+                      </Box>
+                    </Box>
+                    <Button
+                      color="blue"
+                      bgColor="transparent"
+                      onClick={() => useMax()}
+                    >
+                      Use Max
+                    </Button>
+                  </Box>
+                </FormLabel>
+
+                <Input
+                  id="amount"
+                  color="grey"
+                  fontSize="sm"
+                  type={"number"}
+                  placeholder="Enter Amount"
+                  required={true}
+                  readOnly={false}
+                  value={amount}
+                  size="lg"
+                  onChange={(e) => setAmount(parseInt(e.currentTarget.value))}
+                  bg="whitesmoke"
+                />
+              </FormControl>
+
+              {amount > props.balance ? (
+                <Text ml={3} my={0} fontSize="xs" color="red">
+                  Insufficent Balance
+                </Text>
+              ) : (
+                <Box />
+              )}
+
+              <Text textAlign="center" my={3} fontSize="xs">
+                <Box as="span" color="grey">
+                  {" "}
+                  {amount / props.rate}{" "}
+                </Box>{" "}
+                ALGO
+              </Text>
+
+              <FormControl mt={10} px={3}>
+                <FormLabel color="black.200" ml={1.5} key={"note"}>
+                  Note
+                </FormLabel>
+
+                <Input
+                  id="note"
+                  color="grey"
+                  fontSize="sm"
+                  type={"text"}
+                  placeholder="Transaction note"
+                  required={true}
+                  readOnly={false}
+                  value={note}
+                  size="lg"
+                  onChange={(event) => setNote(event.currentTarget.value)}
+                  bg="whitesmoke"
+                />
+              </FormControl>
+
+              <Button
+                variant="solid"
+                type="submit"
+                width="full"
+                height="48px"
+                bg="blue"
+                mt={4}
+                loadingText="Submitting"
+                colorScheme={"blue.500"}
+                disabled={verifiedAddress ? false : true}
+                onClick={() => SendTransaction()}
+              >
+                Continue
+              </Button>
+            </Box>
+          )}
+
+          {txtID && (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                bgColor="red"
+              >
+                <Box as="img" src="/grey-verified.svg" height="100px" />
+                <Heading
+                  textAlign="center"
+                  as="h6"
+                  fontWeight="bold"
+                  fontSize="24px"
+                  color="grey"
+                >
+                  Transaction Successful
+                </Heading>
+                {/* <Box px={3}>
+                  <Text>{txtID}</Text>
+                </Box> */}
+                <Link
+                  target="_blank"
+                  href={`https://testnet.algoexplorer.io/tx/${txtID}`}
+                >
+                  <Button
+                    mx={3}
+                    variant="solid"
+                    type="submit"
+                    width="full"
+                    height="48px"
+                    bg="blue.500"
+                    mt={4}
+                    loadingText="Submitting"
+                    colorScheme={"blue.500"}
+                    onClick={props.onToggle}
+                  >
+                    View on Algo Explorer
+                  </Button>
+                </Link>
+              </Box>
+            </>
+          )}
+        </>
       )}
-
-      <Text textAlign="center" my={3} fontSize="xs">
-        <Box as="span" color="grey">
-          {" "}
-          {amount / props.rate}{" "}
-        </Box>{" "}
-        ALGO
-      </Text>
-
-      <Button
-        variant="solid"
-        type="submit"
-        width="full"
-        height="48px"
-        bg="blue"
-        mt={4}
-        loadingText="Submitting"
-        colorScheme={"blue.500"}
-        disabled={verifiedAddress ? false : true}
-      >
-        Continue
-      </Button>
     </>
   );
 };
@@ -232,7 +354,7 @@ const NoMoney = (props: { onToggle: () => void; onRecieve: () => void }) => {
         alignItems="center"
         mt={8}
       >
-        <Box as="img" src="send-no-funds-promo.svg"></Box>
+        <Box as="img" src="send-no-funds-promo.svg" height="200px" />
 
         <Heading
           my={3}
@@ -287,3 +409,5 @@ const NoMoney = (props: { onToggle: () => void; onRecieve: () => void }) => {
     </>
   );
 };
+
+// txId: '5ULMCEUAKO2X6BMC63WQN3WVR7WU6LU76YELUKAKDIREMQNOEYHQ'

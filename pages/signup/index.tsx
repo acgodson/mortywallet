@@ -238,6 +238,7 @@ const SignUpPage = () => {
   function navigate(path: string) {
     router.push(path);
   }
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordX, setPasswordX] = useState<string>("");
@@ -290,15 +291,14 @@ const SignUpPage = () => {
 
   return (
     <SignupLayout>
-      <Box
+      {/* <Box
         as="img"
         src="/bg-pattern.svg"
         alt="bgg"
         height="auto"
         width="100%"
-      />
+      /> */}
 
-      
       <LogoHeader />
       <Container
         width="100%"
@@ -307,19 +307,9 @@ const SignUpPage = () => {
         alignItems="center"
         justifyContent="center"
         mx={0}
-        pb={12}
+        pb={10}
         bgColor="rgb(18, 29, 51)"
       >
-        <Box
-          as="img"
-          src="/bg-pattern.svg"
-          alt="bgg"
-          height="auto"
-          width="100%"
-        />
-
-        <LogoHeader />
-
         <Box
           bgColor="white"
           borderRadius={8}
@@ -502,7 +492,14 @@ const SignUpPage = () => {
               Already have a morty account?
             </Text>
 
-            <Box fontSize="lg" mt={4} mb={3} color="rgb(12, 108, 242)">
+            <Box
+              fontSize="lg"
+              mt={4}
+              mb={3}
+              color="rgb(12, 108, 242)"
+              onClick={() => navigate("/login")}
+              cursor="pointer"
+            >
               Login
             </Box>
           </Box>

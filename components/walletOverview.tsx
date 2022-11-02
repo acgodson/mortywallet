@@ -37,6 +37,7 @@ const WalletOverView = () => {
   const [defaultDate, setDefaultDate] = useState<any>(dates[0]);
   const [fetching, setFetching] = useState(true);
   const [totalCredits, setTotalCredits] = useState<any | null>(null);
+  const [totalDebits, settotalDebits] = useState<any | null>(null);
   let router = useRouter();
   function navigate(path: string) {
     router.push(path);
@@ -69,9 +70,20 @@ const WalletOverView = () => {
 
   function getTotalCredits() {
     if (inTransactions) {
-      const totalCredits = inTransactions.map((x: any) => x.amount);
-      const sum = sumArray(totalCredits);
+      const totalCredit = inTransactions.map((x: any) => x.amount);
+      const totalDebit = outTransactions.map((x: any) => x.amount);
+      const sum = sumArray(totalCredit);
+      const sumX = sumArray(totalDebit);
+
+      console.log(sumX + "dgdhdjjdjd");
       setTotalCredits(sum);
+      settotalDebits(sumX);
+      // if (!sumX || sumX === 0) {
+      //   settotalDebits(0);
+      // }
+      // if (!sum || sum === 0) {
+      //   setTotalCredits(0);
+      // }
       setFetching(false);
     }
   }
@@ -249,7 +261,7 @@ const WalletOverView = () => {
 
         {!fetching ? (
           <HStack justifyContent="center" width="100%" py={12}>
-            <PieChartSection in={totalCredits} out={0} />
+            <PieChartSection in={totalCredits} out={totalDebits} />
           </HStack>
         ) : (
           <HStack w="100%" justifyContent="center" py={12}>

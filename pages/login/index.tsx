@@ -302,21 +302,25 @@ const LoginPage = () => {
 
             <TabPanel>
               <Box px={2.5}>
-                <Button
-                  variant="solid"
-                  type="submit"
-                  width="full"
-                  height="48px"
-                  mt={4}
-                  loadingText="Submitting"
-                  bgColor="blue.500"
-                  color="white"
-                  justifyContent="flex-start"
-                  disabled={true}
+                <Text
+                  variant="h3"
+                  fontWeight="bold"
+                  color="orange"
+                  textAlign="center"
                 >
-                  <FaTwitter />
-                  <Text ml={4}>Continue with Twitter</Text>
-                </Button>
+                  Sell Faster on Morty{" "}
+                </Text>
+                <Text
+                  mb={3}
+                  variant="h4"
+                  fontSize="sm"
+                  color="#333"
+                  fontWeight="semibold"
+                >
+                  Create a verifiable wallet & store by signing in with your
+                  social account, and let your followers pay for assets or
+                  services posted on your timeli ne from morty
+                </Text>
                 <Button
                   variant="solid"
                   type="submit"
@@ -331,6 +335,22 @@ const LoginPage = () => {
                 >
                   <FaFacebook />
                   <Text ml={4}>Continue with Facebook</Text>
+                </Button>
+
+                <Button
+                  variant="solid"
+                  type="submit"
+                  width="full"
+                  height="48px"
+                  mt={4}
+                  loadingText="Submitting"
+                  bgColor="blue.500"
+                  color="white"
+                  justifyContent="flex-start"
+                  disabled={true}
+                >
+                  <FaTwitter />
+                  <Text ml={4}>Continue with Twitter</Text>
                 </Button>
               </Box>
             </TabPanel>

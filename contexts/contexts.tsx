@@ -282,11 +282,12 @@ const GlobalProvider = ({ children }) => {
       const xx = [];
       const yy = [];
 
-      const credits = transactions.filter(
-        (x: any) => x["payment-transaction"].reciever !== account
+      const debits = transactions.filter(
+        (x: any) => x["payment-transaction"].receiver !== account
       );
 
-      const debits = transactions.filter((x: any) => x.sender === account);
+      const credits = transactions.filter((x: any) => x.sender !== account);
+
       credits.forEach((e: any) => {
         const obj = {
           id: e.id,
@@ -310,14 +311,19 @@ const GlobalProvider = ({ children }) => {
     }
   };
 
-  const signAndSendTransaction = async () => {
+  const signAndSendTransaction = async (
+    reciever: string,
+    note: string,
+    amount: number
+  ) => {
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
     }
     const rpc = new RPC(provider);
-    const result = await rpc.signAndSendTransaction();
-    uiConsole("Transaction ID: ", result);
+    const result = await rpc.signAndSendTransaction(reciever, note, amount);
+
+    return result;
   };
 
   //Initialize web3Auth
