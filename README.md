@@ -43,47 +43,5 @@ Morty-frontend-web is currently built on [Nextjs]() and styled with [Chakra UI](
 
 - Run `npm install` and `npm run dev` and you're ready to go!
 
-- Additionally, if you may need to run `npm run dev-ssl` to create https proxy for accesing facebook API
+- Additionally, you may need to run `npm run dev-ssl` to create https proxy for accesing facebook API
 
-## Design Architecture
-
-Logo Inspiration
-![Logo](/screenshots/logo_inspiration.PNG)
-
-## ScreensShots
-
-- Welome to MortyWallet
-  ![Morty Wallet]()
-
-- HomePage
-  ![practice](/screenshots/
-
-- Sending Transactions
-  ![Push assets on chain]()
-
-- Recieve Transcations
-  ![practice](/screenshots/)
-
-- Access Morty Store
-  ![practice](/screenshots/)
-
-- View Transactions
-  ![practice](/screenshots/)
-
-## Challenges we faced
-
-## What Next for Morty
-
-- **Morty Store**
-
-- **Morty Token**
-
-- **Morty App**
-  Check [cross-platform integration]() for android app version of morty wallet.
-
-\_
-
-## Contributors
-
-- Product & Design: [Stacy]()
-- Dev : [Tinybird](https://github.com/acgodson)
