@@ -304,10 +304,10 @@ const MyTransactions = () => {
                 <Tr>
                   {/* <Td>{x.created.toDate()}</Td> */}
                   <Td>{index + 1}</Td>
-                  <Td isTruncated={true} w="30px">
+                  <Td  w="30px">
                     {x.id}
                   </Td>
-                  <Td isTruncated={true} w="30px">
+                  <Td w="30px">
                     {x.sender ? x.sender : "me"}
                   </Td>
                   {/* <Td isTruncated={true} w="30px">
