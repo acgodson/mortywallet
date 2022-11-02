@@ -8,17 +8,17 @@ Morty Wallet is a flexible wallet that permits users to receive/send money or as
 
 Leveraging [Firebase JWT]() & custom [web3auth](), morty abolishes the struggle of writing down private keys and seed phrases. Hence users can easily create recoverable web & mobile wallets, with a touch of web2 user experience (email/password & social logins)
 
-### [Youtube Video]()
+### [Youtube Video](https://youtu.be/rZywcRB9Q6k)
 
-### [Website Demo]()
+### [Website Demo](https://mortywallet.vercel.app)
 
 ## Features
 
 - **Web2-like Onboarding** - Sign up and manage your wallet using your familiar email and password
 
-- **Data Visualization** - See **Trading Charts** from ALGO closing prices within last 5 days, and also **Pie Charts** illustrating personal expenditure and income over time 
+- **Sign & Send Transactions** - Sign and Send transactions over algorand blockchain (testnet)
 
-- **Decentralized Storage** - Pin asset metadata securly on IPFS on serverside and control signatures allowed to modify data
+- **Data Visualization** - **Trading Charts** from ALGO closing prices within last 5 days, and also **Pie Chart** illustrating personal expenditure and income over time
 
 - **Social Marketplace** - Pay for services listed on the timeline Twitter or Facebook pages/profiles of your interest using your algowallet
 
@@ -45,3 +45,48 @@ Morty-frontend-web is currently built on [Nextjs]() and styled with [Chakra UI](
 
 - Additionally, you may need to run `npm run dev-ssl` to create https proxy for accesing facebook API
 
+## Design Architecture
+
+![Logo](/screenshots/logo_inspiration.PNG)
+
+## ScreensShots
+
+- Welome to MortyWallet
+  ![Morty Wallet](/screenshots/welcome.png)
+
+- HomePage
+  ![home](/screenshots/home.png)
+
+- Sending Transactions
+  !send](/screenshots/send.png)
+
+- Recieve Transcations
+  ![recieve](/screenshots/receive.png)
+
+- Access Morty Store
+  ![marketplace](/screenshots/shop.png)
+
+- Transactions
+  ![transactions](/screenshots/)
+
+## Challenges we faced
+
+- low CPU power and struggled with WSL, as we initially tried to create stateful smart contract with Reach for rewarding users with morty tokens over each bill completed on the morty store as an additional feature
+
+- Twitter API access has not been granted. So we were only able to implement custom facebook login for merchants
+
+## What Next for Morty Wallet
+
+- **Morty Store**
+  Sellers who have to create verifable merchant wallet, can programmatically share links of assets listed for sale on algo blockchain via morty
+
+- **Morty Token**
+  Sellers can create promos and reward customers with redeemable tokens as they make transactions
+
+- **Morty App**
+  Implementing web3auth share brings the possiblity of logging into the same wallet on multiple platforms. During this hack, we already started an Android implementation using flutter Check out [morty-wallet-android]()
+
+## Contributors
+
+- Product & Design: [Stacy]()
+- Dev : [Tinybird](https://github.com/acgodson)

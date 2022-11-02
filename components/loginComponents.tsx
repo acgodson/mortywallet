@@ -108,11 +108,11 @@ export const LoginBody = (props: { children: any }) => {
               src="/exchange-grayscale.svg"
               mb={0}
             /> */}
-            <Avatar bgColor="teal" p={0} mb={0}>
+            <Avatar bgColor="grey" p={0} mb={0}>
               <Box as="img" src="/shop.svg" />
             </Avatar>
             <Text color="grey" fontWeight="bold" fontSize="xl" ml={2}>
-              Seller
+              Merchant
             </Text>
           </Tab>
         </TabList>
@@ -120,7 +120,7 @@ export const LoginBody = (props: { children: any }) => {
         {props.children}
       </Tabs>
 
-      <Divider mt={1} mb={10} />
+      <Divider mt={1} mb={6} />
 
       <Box
         display="flex"

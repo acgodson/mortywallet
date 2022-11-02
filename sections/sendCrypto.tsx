@@ -42,7 +42,7 @@ const SendNoSection = (props: {
         pt={2}
         pb={10}
       >
-        {balance < 0 ? (
+        {balance < 5 ? (
           <NoMoney onToggle={props.onToggle} onRecieve={props.onToggle} />
         ) : (
           <SendMoney
@@ -277,7 +277,6 @@ const SendMoney = (props: {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                bgColor="red"
               >
                 <Box as="img" src="/grey-verified.svg" height="100px" />
                 <Heading
