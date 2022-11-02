@@ -57,8 +57,8 @@ Morty-frontend-web is currently built on [Nextjs]() and styled with [Chakra UI](
 - HomePage
   ![home](/screenshots/home.png)
 
-- Private Key Wallets
-  [!send](/screenshots/nomoney.png)
+- Secure Wallet
+  ![send](/screenshots/nomoney.png)
 
 - Send Transcations
   ![recieve](/screenshots/send.png)
