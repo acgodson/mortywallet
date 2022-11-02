@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef, useCallback} from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -13,6 +13,7 @@ import {
 import { GlobalContext } from "contexts/contexts";
 import CryptoChart from "components/chart";
 
+
 const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
   const assetz = ["Algorand", "Mort"];
   const { user, defaultRate, defaultSymbol, historyPrices, balance }: any =
@@ -23,7 +24,7 @@ const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
   const [fetching, setFetching] = useState(true);
   const [chartInfo, setChartInfo] = useState<any | null>(null);
 
-  useEffect(() => {
+  useEffect(() => {   
     if (historyPrices) {
       if (historyPrices.length > 3) {
         setFetching(false);

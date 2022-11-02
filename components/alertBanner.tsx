@@ -9,14 +9,14 @@ const AlertBanner = (props: {
   return (
     <VStack
       w="100%"
-      pt="70px"
       display="flex"
       justifyContent="center"
       borderTopLeftRadius={8}
       alignItems="center"
+      pb={3}
     >
       <Box
-        bgColor="white"
+        bgColor="blue.50"
         px={3}
         py={4}
         borderRadius={8}

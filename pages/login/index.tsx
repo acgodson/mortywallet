@@ -4,32 +4,40 @@ import {
   Box,
   Text,
   Button,
-  Container,
   FormControl,
   FormLabel,
   Input,
-  Divider,
   useToast,
-  VStack,
-  HStack,
-  Stack,
-  Tab,
-  TabList,
   TabPanel,
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  TwitterAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
+} from "firebase/auth";
 import { useRouter } from "next/router";
 import { AuthContext, GlobalContext } from "../../contexts/contexts";
 import { LoginBody, LoginLayout, LogoHeader } from "components/loginComponents";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { createUser } from "db/firestore";
 
 const auth = getAuth();
-
+const tProvider = new TwitterAuthProvider();
+const fProvider = new FacebookAuthProvider();
 const LoginPage = () => {
-  const { mapUserData, setUserCookie, loginWeb3 }: any =
-    useContext(GlobalContext);
+  const {
+    mapUserData,
+    setUserCookie,
+    loginWeb3,
+    twitterAuthCredential,
+    setTwitterAuthCredential,
+    facebookAccessToken,
+    setFacebookAccessToken,
+  }: any = useContext(GlobalContext);
   let router = useRouter();
   const toast = useToast();
   function navigate(path: string) {
@@ -40,7 +48,6 @@ const LoginPage = () => {
   const [allowPassword, setAllowPassword] = useState<boolean>(false);
 
   async function signIn(email: string, password: string) {
-    console.log(email);
     try {
       signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
@@ -71,8 +78,99 @@ const LoginPage = () => {
     }
   }
 
+  async function signInWithTwitter() {
+    try {
+      signInWithPopup(auth, tProvider)
+        .then(async (result) => {
+          const credential = TwitterAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const secret = credential.secret;
+
+          const TwitterAuthOBJ = {
+            credential: credential,
+            token: token,
+            secret: secret,
+          };
+
+          //Save twitter details for accesing Twitter API later
+          setTwitterAuthCredential(TwitterAuthOBJ);
+
+          // User credential from custom Auth
+          const user = result.user;
+
+          // Sign in web3auth
+          await loginWeb3(result);
+
+          //Save Browser Cookie
+          const userData = await mapUserData(user);
+          setUserCookie(userData);
+
+          navigate("/home");
+        })
+
+        .catch((error) => {
+          const errorCode = error.code;
+          toast({
+            title: "Error",
+            description: error.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+
+          // const email = error.customData.email;
+          //  const credential = TwitterAuthProvider.credentialFromError(error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function siginInWithFacebook() {
+    fProvider.addScope(" pages_show_list");
+    fProvider.addScope("pages_read_engagement");
+    fProvider.addScope("pages_manage_posts");
+    fProvider.addScope("public_profile ");
+    fProvider.addScope("user_location ");
+
+    signInWithPopup(auth, fProvider)
+      .then(async (result) => {
+        // The signed-in user info.
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken;
+
+        //Save facebook access token for accesing facebook API later
+        setFacebookAccessToken(accessToken);
+
+        // User credential from custom Auth
+        const user = result.user;
+
+        // Update User in db
+        await createUser(user.email, "", user.uid);
+
+        // Sign in web3auth
+        await loginWeb3(result);
+        //Save Browser Cookie
+        const userData = await mapUserData(user);
+        setUserCookie(userData);
+
+        navigate("/home");
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        // ...
+      });
+  }
+
   function handleSignIn() {
     signIn(email, password);
+  }
+
+  function handleSocialSignIn() {
+    siginInWithFacebook();
   }
 
   return (
@@ -214,6 +312,7 @@ const LoginPage = () => {
                   bgColor="blue.500"
                   color="white"
                   justifyContent="flex-start"
+                  disabled={true}
                 >
                   <FaTwitter />
                   <Text ml={4}>Continue with Twitter</Text>
@@ -228,6 +327,7 @@ const LoginPage = () => {
                   bgColor="blue"
                   color="white"
                   justifyContent="flex-start"
+                  onClick={handleSocialSignIn}
                 >
                   <FaFacebook />
                   <Text ml={4}>Continue with Facebook</Text>

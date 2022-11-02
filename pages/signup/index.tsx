@@ -18,6 +18,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { createUser } from "../../db/firestore";
 import { GlobalContext } from "../../contexts/contexts";
 import { LogoHeader } from "components/loginComponents";
+import { SignupLayout } from "components/signupLayout";
 
 const country_list = [
   "United States",
@@ -288,7 +289,17 @@ const SignUpPage = () => {
   }
 
   return (
-    <>
+    <SignupLayout>
+      <Box
+        as="img"
+        src="/bg-pattern.svg"
+        alt="bgg"
+        height="auto"
+        width="100%"
+      />
+
+      
+      <LogoHeader />
       <Container
         width="100%"
         display="flex"
@@ -497,7 +508,7 @@ const SignUpPage = () => {
           </Box>
         </Box>
       </Container>
-    </>
+    </SignupLayout>
   );
 };
 

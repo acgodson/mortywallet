@@ -19,11 +19,12 @@ import { GlobalContext } from "contexts/contexts";
 
 const NavBar = (props: {
   onSend: () => void;
+  onRecieve: () => void;
+  onShop: () => void;
   onLogOut: () => {};
   index: number;
 }) => {
-  const { user, logout, defaultRate, defaultSymbol, balance }: any =
-    useContext(GlobalContext);
+  const { user, logout }: any = useContext(GlobalContext);
   let router = useRouter();
   function navigate(path: string) {
     router.push(path);
@@ -123,7 +124,8 @@ const NavBar = (props: {
               border="solid 1px whitesmoke"
               disabled={false}
               fontWeight="bold"
-              onClick={() => navigate("/recieve")}
+              onClick={props.onRecieve}
+              // onClick={() => navigate("/recieve")}
             >
               Recieve
             </Button>
@@ -134,14 +136,18 @@ const NavBar = (props: {
               color="white"
               width="88px"
               py={0}
-              // pl={4}
-              // pr={4}
-
+              onClick={props.onShop}
               disabled={false}
               fontWeight="bold"
             >
               <Box as="span">
-                <Box as="img" alt="shop" src="closed.svg" />
+                <Box
+                  as="img"
+                  alt="shop"
+                  src="/shop.svg"
+              
+                  height="40px"
+                />
               </Box>
               Shop
             </Button>

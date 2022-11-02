@@ -1,18 +1,19 @@
 import { Box, Button, Divider, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FaHome, FaUser } from "react-icons/fa";
 
 const Routes = [
   {
     id: 1,
     name: "Home",
-    url: "",
+    url: "/",
     icon: <FaHome fontSize="25px" />,
   },
   {
     id: 2,
     name: "Profile",
-    url: "",
+    url: "/settings",
     icon: <FaUser fontSize="25px" />,
   },
 ];
@@ -25,7 +26,11 @@ const Assets = [
   },
 ];
 
-const SideNav = (props: {index: number}) => {
+const SideNav = (props: { index: number }) => {
+  let router = useRouter();
+  function navigate(path: string) {
+    router.push(path);
+  }
   return (
     <Box
       bgColor="white"
@@ -43,13 +48,14 @@ const SideNav = (props: {index: number}) => {
             type="submit"
             width="full"
             height="48px"
-            bg={i === props.index ? "blue.100" : "whiteAlpha.100" }
+            bg={i === props.index ? "blue.100" : "whiteAlpha.100"}
             color="#333"
             border="solid 1.5px whitesmoke"
             display="flex"
             justifyContent="flex-start"
             alignItems="center"
             my={1}
+            onClick={() => navigate(x.url)}
           >
             {x.icon}
 

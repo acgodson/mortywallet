@@ -1,7 +1,7 @@
 import { Stack, Container, Box, Text } from "@chakra-ui/react";
 import LoginBanner from "./loginBanner";
 
-export const signupLayout = (props: { children: any }) => {
+export const SignupLayout = (props: { children: any }) => {
   return (
     <Stack
       direction={["column", "column", "row"]}

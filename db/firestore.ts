@@ -1,18 +1,14 @@
 import {
   getFirestore,
-  query,
   onSnapshot,
   collection,
   getDoc,
   getDocs,
-  addDoc,
   updateDoc,
-  where,
   doc,
   setDoc,
   deleteDoc,
   serverTimestamp,
-  DocumentReference,
   DocumentSnapshot,
 } from "firebase/firestore";
 import { initFirebase } from "../config";
@@ -54,7 +50,6 @@ export const getUser = async (userId: string) => {
   const userDocRef = doc(db, "users", userId);
   const getRef = await getDoc(userDocRef);
   const data = getRef.data();
-  const deposits = sumArray(data.deposits);
   const dataObj: UserType = {
     country: data.country,
     email: data.email,

@@ -2,6 +2,14 @@ import { SafeEventEmitterProvider } from "@web3auth/base";
 import algosdk from "algosdk";
 import { ALGO_API_KEY } from "../config";
 
+const algodToken = {
+  "x-api-key": ALGO_API_KEY,
+};
+const algodServer = "https://testnet-algorand.api.purestake.io/idx2";
+const algodPort = "";
+
+const indexerClient = new algosdk.Indexer(algodToken, algodServer, algodPort);
+
 export default class AlgorandRPC {
   private provider: SafeEventEmitterProvider;
 
@@ -88,6 +96,57 @@ export default class AlgorandRPC {
       return txHash.txId;
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  fetchTransactions = async (
+    address: string,
+    startTime: string | null
+  ): Promise<any> => {
+    try {
+      let limit = 5;
+      let transactionInfo = startTime
+        ? await indexerClient
+            .searchForTransactions()
+            .address(address)
+            .afterTime(startTime)
+            .do()
+        : await indexerClient.searchForTransactions().address(address).do();
+
+      if (transactionInfo) {
+        const info = transactionInfo;
+        console.log(info);
+        return info;
+      }
+      console.log("transaction has been retrived");
+    } catch (e) {
+      console.log(e);
+      console.trace();
+    }
+  };
+
+  fetchSellersAssets = async (address: string): Promise<any> => {
+    try {
+      let response = await indexerClient
+        .lookupAccountCreatedAssets(address)
+        .do();
+      if (response) {
+        const info = JSON.stringify(response, undefined, 2);
+        console.log(info);
+        return info;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  isAlgorandAddress = async (address: string): Promise<any> => {
+    try {
+      const client = await this.makeClient();
+      const decode = client.decodeAddress(address);
+      return true;
+    } catch (ex) {
+      return false;
     }
   };
 }

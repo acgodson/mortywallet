@@ -6,7 +6,7 @@ import {
   CRYPTO_COMPARE_API_KEY,
   WEB3AUTH_CLIENT_ID,
 } from "../config";
-import { getAuth, UserCredential } from "firebase/auth";
+import { getAuth, UserCredential, TwitterAuthProvider } from "firebase/auth";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Web3AuthCore } from "@web3auth/core";
 import {
@@ -34,15 +34,12 @@ const GlobalProvider = ({ children }) => {
   const router = useRouter();
   const [showDialog, setShowDialog] = useState(false);
   const [userObject, setUserObject] = useState({
-    bonus: "",
     country: "",
-    deposits: [0],
     email: "",
     imgUrl: "",
     name: "",
     phone: "",
     uid: "",
-    withdraws: [0],
   });
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
   const [defaultRate, setDefaultRate] = useState<any | null>(null);
@@ -52,6 +49,14 @@ const GlobalProvider = ({ children }) => {
   const [account, setAccount] = useState<any | null>(null);
   const [keyPairs, setKeyPairs] = useState<any | null>(null);
   const [balance, setBalance] = useState<any | null>(null);
+  const [inTransactions, setInTransactions] = useState<any | null>(null);
+  const [outTransactions, setOutTransactions] = useState<any | null>(null);
+  const [twitterAuthCredential, setTwitterAuthCredential] = useState<
+    any | null
+  >(null);
+  const [facebookAccessToken, setFacebookAccessToken] = useState<any | null>(
+    null
+  );
 
   function uiConsole(...args: any[]): void {
     const el = document.querySelector("#console>p");
@@ -256,6 +261,55 @@ const GlobalProvider = ({ children }) => {
     uiConsole("Hash", result);
   };
 
+  const fetchTransactionHistory = async () => {
+    if (!provider) {
+      console.log("provider not initialized yet");
+      return;
+    }
+    if (!account) {
+      console.log("user not signed in");
+      return;
+    }
+
+    const allTime = "2020-06-03T10:00:00-05:00";
+
+    const rpc = new RPC(provider);
+    const result = await rpc.fetchTransactions(account, allTime);
+
+    if (result) {
+      const { transactions }: any = result;
+
+      const xx = [];
+      const yy = [];
+
+      const credits = transactions.filter(
+        (x: any) => x["payment-transaction"].reciever !== account
+      );
+
+      const debits = transactions.filter((x: any) => x.sender === account);
+      credits.forEach((e: any) => {
+        const obj = {
+          id: e.id,
+          sender: e.sender,
+          amount: e["payment-transaction"].amount,
+          fee: e.fee,
+        };
+        xx.push(obj);
+      });
+      debits.forEach((e: any) => {
+        const obj = {
+          id: e.id,
+          reciever: e["payment-transaction"].receiver,
+          amount: e["payment-transaction"].amount,
+          fee: e.fee,
+        };
+        yy.push(obj);
+      });
+      setInTransactions(xx);
+      setOutTransactions(yy);
+    }
+  };
+
   const signAndSendTransaction = async () => {
     if (!provider) {
       uiConsole("provider not initialized yet");
@@ -396,6 +450,13 @@ const GlobalProvider = ({ children }) => {
     }
   });
 
+  //Fetch Transaction history
+  useEffect(() => {
+    if (!inTransactions) {
+      fetchTransactionHistory();
+    }
+  });
+
   return (
     <GlobalContext.Provider
       value={{
@@ -421,6 +482,12 @@ const GlobalProvider = ({ children }) => {
         signMessage,
         signAndSendTransaction,
         balance,
+        setTwitterAuthCredential,
+        twitterAuthCredential,
+        facebookAccessToken,
+        setFacebookAccessToken,
+        outTransactions,
+        inTransactions,
       }}
     >
       {children}
