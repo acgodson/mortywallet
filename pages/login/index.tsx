@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -30,6 +30,7 @@ const tProvider = new TwitterAuthProvider();
 const fProvider = new FacebookAuthProvider();
 const LoginPage = () => {
   const {
+    user,
     mapUserData,
     setUserCookie,
     loginWeb3,
@@ -172,6 +173,14 @@ const LoginPage = () => {
   function handleSocialSignIn() {
     siginInWithFacebook();
   }
+
+  
+useEffect(() => {
+  if (user) {
+    navigate("/home");
+  }
+})
+
 
   return (
     <>

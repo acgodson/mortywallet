@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -230,7 +230,7 @@ const country_list = [
 ];
 
 const SignUpPage = () => {
-  const { mapUserData, setUserCookie, loginWeb3 }: any =
+  const { user, mapUserData, setUserCookie, loginWeb3 }: any =
     useContext(GlobalContext);
   const auth = getAuth();
   let router = useRouter();
@@ -288,6 +288,14 @@ const SignUpPage = () => {
   function handleSignIn() {
     signUp(email, password);
   }
+
+
+useEffect(() => {
+  if (user) {
+    navigate("/home");
+  }
+});
+
 
   return (
     <SignupLayout>
