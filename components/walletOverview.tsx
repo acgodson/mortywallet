@@ -196,6 +196,7 @@ const WalletOverView = () => {
         mt={3}
         w="100%"
         cursor="pointer"
+        display={["none", "block", "block"]}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>

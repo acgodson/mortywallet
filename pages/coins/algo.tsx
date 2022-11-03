@@ -15,6 +15,7 @@ import {
   Td,
   Thead,
   Tr,
+  Button,
 } from "@chakra-ui/react";
 import NavBar from "components/NavBar";
 import UpgradeSection from "../../sections/shopSection";
@@ -23,12 +24,15 @@ import { GlobalContext } from "contexts/contexts";
 import SideNav from "components/sidenav";
 import RecieveCryptoSection from "sections/recieveCrypto";
 import { useRouter } from "next/router";
+import { FaExpand } from "react-icons/fa";
+import Link from "next/link";
+
 
 const Algo = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [closeUpgrade, setCloseUpgrade] = useState(true);
   const [closeSend, setCloseSend] = useState(true);
-  const { user, balance, logout, inTransactions }: any =
+  const { user, balance, defaultRate, logout, inTransactions }: any =
     useContext(GlobalContext);
   const [page, setPage] = useState("");
   let router = useRouter();
@@ -111,10 +115,11 @@ const Algo = () => {
         >
           <Box pt="60px" />
 
-          <VStack spacing={3} pt="100px" px={8} alignItems="start">
+          <VStack spacing={3} pt="100px" px={[0,0,8]} alignItems="start">
             <Stack
               direction={["column", "column", "row"]}
               w="100%"
+              px={[6,6,0]}
               alignItems="center"
             >
               <Box w="100%">
@@ -218,7 +223,7 @@ const Algo = () => {
                       ALGO Balance
                     </Box>
                     <Box as="h6" fontWeight="bold" color="grey">
-                      ${balance}
+                      ${balance * defaultRate} 
                       <br />
                       <Box
                         opacity={0.7}
@@ -241,7 +246,10 @@ const Algo = () => {
               (inTransactions.length > 0 ? (
                 <MyTransactions />
               ) : (
-                <NoTransactions />
+                <NoTransactions onRecieve= {() => {
+                  setPage("recieve");
+                  setCloseSend(false);
+                }} />
               ))}
           </VStack>
         </Box>
@@ -290,17 +298,22 @@ const MyTransactions = () => {
   });
 
   return (
-    <Box w="100%" maxW="700px">
+    <Box overflowX="auto"
+    
+    display="inherit"
+    width="100%"
+    maxW="700px">
       <TableContainer>
         <Table variant="simple" borderRadius={12}>
           <Thead color="blue.200">
             <Tr>
               <Td>S/N</Td>
               <Td>txID</Td>
-              <Td>Sender</Td>
+              {/* <Td>Sender</Td> */}
               {/* <Td>Reciever</Td> */}
               <Td isNumeric>Amount</Td>
-              <Td isNumeric>Fee</Td>
+              {/* <Td isNumeric>Fee</Td> */}
+              <Td>Explorer</Td>
             </Tr>
           </Thead>
 
@@ -310,24 +323,44 @@ const MyTransactions = () => {
                 <Tr>
                   {/* <Td>{x.created.toDate()}</Td> */}
                   <Td>{index + 1}</Td>
-                  <Td w="30px">{x.id}</Td>
-                  <Td w="30px">{x.sender ? x.sender : "me"}</Td>
-                  {/* <Td isTruncated={true} w="30px">
-                    {x.reciever ? x.reciever : "me"}
-                  </Td> */}
+                  <Td w="15px">
+                    <Text as="span" width="15px" noOfLines={1} isTruncated>
+                      {x.id}
+                    </Text>
+                  </Td>
+                
                   <Td>{x.amount}</Td>
-                  <Td>{x.fee}</Td>
+                   <Td>
+                    <Link
+                     href= {`https://testnet.algoexplorer.io/tx/${x.id}`}
+                      target="_blank"
+                    >
+                     <Button
+                      boxShadow="lg"
+                      h="32px"
+                      bgColor="red.500"
+                      color="white"
+                      width="25px"
+                      py={0}
+                      px={2}
+                      fontWeight="bold"
+                      fontSize="sm"
+                    >
+                      <FaExpand/>
+                    </Button>
+                    </Link>
+                   
+                  </Td>
                 </Tr>
               </Tbody>
             ))}
         </Table>
       </TableContainer>
-      ;
     </Box>
   );
 };
 
-const NoTransactions = () => {
+const NoTransactions = ( props: {onRecieve: () => void}) => {
   return (
     <>
       <VStack
@@ -355,9 +388,15 @@ const NoTransactions = () => {
           color="rgb(12, 108, 242)"
           borderRadius="8px"
           height="40px"
+          _active={{
+            backgroundColor: "rgb(10, 86, 193)",
+            color: "white"
+          }}
           _hover={{
             backgroundColor: "rgb(10, 86, 193)",
+            color: "white"
           }}
+          onClick={props.onRecieve}
         >
           Recieve ALGO Now
         </Box>

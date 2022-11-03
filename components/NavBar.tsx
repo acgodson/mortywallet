@@ -44,11 +44,11 @@ const NavBar = (props: {
       url: "settings",
       id: 2,
     },
-    {
-      name: "Portfolio",
-      url: "earn",
-      id: 3,
-    },
+    // {
+    //   name: "Portfolio",
+    //   url: "earn",
+    //   id: 3,
+    // },
   ];
 
   return (
@@ -88,14 +88,14 @@ const NavBar = (props: {
               />
             </Link>
             {user && (
-              <>
+              <Box display={["none", "none", "inherit"]}>
                 <Text ml={2} fontWeight="semibold">
                   {user.email}
                 </Text>
                 <Button h="33px" ml={3} onClick={logout}>
                   Log out
                 </Button>
-              </>
+              </Box>
             )}
           </Box>
 
@@ -141,13 +141,7 @@ const NavBar = (props: {
               fontWeight="bold"
             >
               <Box as="span">
-                <Box
-                  as="img"
-                  alt="shop"
-                  src="/shop.svg"
-              
-                  height="40px"
-                />
+                <Box as="img" alt="shop" src="/shop.svg" height="40px" />
               </Box>
               Shop
             </Button>
@@ -212,6 +206,17 @@ const NavBar = (props: {
               </Link>
             ))}
 
+            {user && (
+              <Box display={["none", "none", "inherit"]}>
+                <Text ml={2} fontWeight="semibold">
+                  {user.email}
+                </Text>
+                <Button h="33px" ml={3} onClick={logout}>
+                  Log out
+                </Button>
+              </Box>
+            )}
+
             <Box
               as="button"
               color="red.500"
@@ -219,7 +224,7 @@ const NavBar = (props: {
               fontWeight="700"
               onClick={props.onLogOut}
             >
-              Sign out
+              Log out
             </Box>
           </Box>
         )}

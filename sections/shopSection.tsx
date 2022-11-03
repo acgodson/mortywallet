@@ -25,11 +25,11 @@ const UpgradeSection = (props: { onToggle: () => void }) => {
         top="0"
       >
         <Box
-          w="500px"
+          w={["100%", "100%", "500px"]}
           bgColor="white"
           h="100vh"
           float="right"
-          px={6}
+          px={[0, 0, 6]}
           pt={2}
           pb={10}
         >
@@ -151,7 +151,7 @@ const AboutShop = (props: { onToggle: () => void }) => {
                 letterSpacing={1}
                 color="grey"
               >
-                Active
+                coming soon
               </Box>
             </Box>
 

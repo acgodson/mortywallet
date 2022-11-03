@@ -14,7 +14,8 @@ import { useContext } from "react";
 import WalletTile from "../components/walletTile";
 
 const RecieveCryptoSection = (props: { onToggle: () => void }) => {
-  const { user, logout, balance, account, defaultRate }: any = useContext(GlobalContext);
+  const { user, logout, balance, account, defaultRate }: any =
+    useContext(GlobalContext);
   return (
     <Box
       width="100%"
@@ -25,11 +26,11 @@ const RecieveCryptoSection = (props: { onToggle: () => void }) => {
       top="0"
     >
       <Box
-        w="500px"
+        w={["100%", "100%", "500px"]}
         bgColor="white"
         h="100vh"
         float="right"
-        px={6}
+        px={[3, 3, 6]}
         pt={2}
         pb={10}
       >

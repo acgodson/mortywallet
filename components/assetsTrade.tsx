@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState, useRef, useCallback} from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -9,22 +15,24 @@ import {
   MenuItem,
   HStack,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { GlobalContext } from "contexts/contexts";
 import CryptoChart from "components/chart";
-
+import Link from "next/link";
 
 const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
+  const toast = useToast;
   const assetz = ["Algorand", "Mort"];
   const { user, defaultRate, defaultSymbol, historyPrices, balance }: any =
     useContext(GlobalContext);
   const [defaultCoin, setDefaultCoin] = useState("Algo");
   const assets = assetz.filter((x) => x !== defaultCoin);
-
   const [fetching, setFetching] = useState(true);
   const [chartInfo, setChartInfo] = useState<any | null>(null);
+  const [show, setShow] = useState(false);
 
-  useEffect(() => {   
+  useEffect(() => {
     if (historyPrices) {
       if (historyPrices.length > 3) {
         setFetching(false);
@@ -55,6 +63,16 @@ const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
           });
         }
       }
+    }
+  });
+
+  useEffect(() => {
+    if (show) {
+      alert(
+        "This feature is not available on this version. Please use recieve to fund your account"
+      );
+
+      setShow(false);
     }
   });
 
@@ -141,20 +159,25 @@ const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
             </MenuList>
 
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Button
-                bgColor="rgb(9 17 34 / 97%)"
-                _hover={{
-                  backgroundColor: "rgb(12, 108, 242)",
-                }}
-                color="white"
-                mx={1.5}
-                my={1}
-                fontWeight="600"
-                fontSize="lg"
-                onClick={props.buy}
+              <Link
+                href="https://dispenser.testnet.aws.algodev.network/"
+                target="_blank"
               >
-                Buy {defaultCoin}
-              </Button>
+                <Button
+                  bgColor="rgb(9 17 34 / 97%)"
+                  _hover={{
+                    backgroundColor: "rgb(12, 108, 242)",
+                  }}
+                  color="white"
+                  mx={1.5}
+                  my={1}
+                  fontWeight="600"
+                  fontSize="lg"
+                  onClick={props.buy}
+                >
+                  Buy {defaultCoin}
+                </Button>
+              </Link>
               <Button
                 bgColor="white"
                 mx={1.5}
@@ -164,7 +187,7 @@ const AssetsTrade = (props: { buy: () => void; swap: () => void }) => {
                 color="rgb(9 17 34 / 97%)"
                 fontWeight="600"
                 fontSize="lg"
-                onClick={props.swap}
+                onClick={() => setShow(true)}
               >
                 Swap {defaultCoin}
               </Button>

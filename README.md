@@ -14,15 +14,15 @@ Leveraging [Firebase JWT]() & custom [web3auth](), morty abolishes the struggle 
 
 ## Features
 
-- **Web2-like Onboarding** - Sign up and manage your wallet using your familiar email and password
+- **Web2-like Onboarding** - Sign up and manage a blockchain wallet using your familiar email and password
 
 - **Sign & Send Transactions** - Sign and Send transactions on the algorand blockchain (testnet)
 
 - **Data Visualization** - **Trading Charts** from ALGO closing prices within last 5 days, and also **Pie Chart** illustrating personal expenditure and income over time
 
-- **Social Marketplace** - Pay for services listed on the Twitter timeline or Facebook pages/profiles of your interest using your algowallet
+- **Social Marketplace** - Pay for services or assets listed on the Twitter or Facebook feeds of your interest using your algowallet
 
-- **Social Marketplace for businesses and Social Media Infuencers** - Create a verifiable wallet/store by signing in with your Twitter of Facebook pages, and let your users pay for assets or services posted on your timeline from [mortystore]()
+- **Social Marketplace for businesses and Social Media Infuencers** - Create a verifiable wallet/store by signing in with your Twitter or Facebook account, and let your users pay for assets or services posted on your timeline from [mortystore]()
 
 ## Tools and Frameworks
 
