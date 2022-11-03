@@ -26,6 +26,7 @@ const CreateAssetSection = (props: {
   const [name, setName] = useState("");
   const [unitName, setUnitName] = useState("");
   const [amount, setAmount] = useState<number>(0);
+  const [result, setResult] = useState<any | null>(null);
 
   //let figure = balance * defaultRate;
 
@@ -38,6 +39,7 @@ const CreateAssetSection = (props: {
       if (asset) {
         console.log(asset);
         setSubmitting(false);
+        setResult(asset);
       }
     } catch (e) {
       setSubmitting(false);
@@ -100,84 +102,110 @@ const CreateAssetSection = (props: {
               }}
             />
           </Box>
+          {!result && (
+            <>
+              {submitting && <CustomLoading />}
 
-          {submitting && <CustomLoading />}
+              {!submitting && (
+                <Box>
+                  <FormControl mt={10} px={3}>
+                    <FormLabel color="black.200" ml={1.5} key={"name"}>
+                      Name
+                    </FormLabel>
+                    <Input
+                      id="name"
+                      color="grey"
+                      fontSize="sm"
+                      type={"text"}
+                      placeholder="Enter Asset name"
+                      required={true}
+                      readOnly={false}
+                      value={name}
+                      size="lg"
+                      onChange={(event) => setName(event.currentTarget.value)}
+                      bg="whitesmoke"
+                    />
+                  </FormControl>
 
-          {!submitting && (
-            <Box>
-              <FormControl mt={10} px={3}>
-                <FormLabel color="black.200" ml={1.5} key={"name"}>
-                  Name
-                </FormLabel>
-                <Input
-                  id="name"
-                  color="grey"
-                  fontSize="sm"
-                  type={"text"}
-                  placeholder="Enter Asset name"
-                  required={true}
-                  readOnly={false}
-                  value={name}
-                  size="lg"
-                  onChange={(event) => setName(event.currentTarget.value)}
-                  bg="whitesmoke"
-                />
-              </FormControl>
+                  <FormControl mt={10} px={3}>
+                    <FormLabel color="black.200" ml={1.5} key={"unit"}>
+                      Unit name
+                    </FormLabel>
+                    <Input
+                      id="name"
+                      color="grey"
+                      fontSize="sm"
+                      type={"text"}
+                      placeholder="Enter Asset unit name"
+                      required={true}
+                      readOnly={false}
+                      value={unitName}
+                      size="lg"
+                      onChange={(event) =>
+                        setUnitName(event.currentTarget.value)
+                      }
+                      bg="whitesmoke"
+                    />
+                  </FormControl>
 
-              <FormControl mt={10} px={3}>
-                <FormLabel color="black.200" ml={1.5} key={"unit"}>
-                  Unit name
-                </FormLabel>
-                <Input
-                  id="name"
-                  color="grey"
-                  fontSize="sm"
-                  type={"text"}
-                  placeholder="Enter Asset unit name"
-                  required={true}
-                  readOnly={false}
-                  value={unitName}
-                  size="lg"
-                  onChange={(event) => setUnitName(event.currentTarget.value)}
-                  bg="whitesmoke"
-                />
-              </FormControl>
+                  <FormControl mt={10} px={3}>
+                    <FormLabel color="black.200" ml={1.5} key={"issue"}>
+                      Total issue
+                    </FormLabel>
+                    <Input
+                      id="issue"
+                      color="grey"
+                      fontSize="sm"
+                      type={"number"}
+                      placeholder="Enter Asset unit name"
+                      required={true}
+                      readOnly={false}
+                      value={amount}
+                      size="lg"
+                      onChange={(event) =>
+                        setAmount(parseInt(event.currentTarget.value))
+                      }
+                      bg="whitesmoke"
+                    />
+                  </FormControl>
 
-              <FormControl mt={10} px={3}>
-                <FormLabel color="black.200" ml={1.5} key={"issue"}>
-                  Total issue
-                </FormLabel>
-                <Input
-                  id="issue"
-                  color="grey"
-                  fontSize="sm"
-                  type={"number"}
-                  placeholder="Enter Asset unit name"
-                  required={true}
-                  readOnly={false}
-                  value={amount}
-                  size="lg"
-                  onChange={(event) =>
-                    setAmount(parseInt(event.currentTarget.value))
-                  }
-                  bg="whitesmoke"
-                />
-              </FormControl>
-
-              <Button
-                variant="solid"
-                type="submit"
-                width="full"
-                height="48px"
-                bg="blue"
-                mt={4}
-                loadingText="Submitting"
-                colorScheme={"blue.500"}
-                onClick={() => createNewAsset()}
+                  <Button
+                    variant="solid"
+                    type="submit"
+                    width="full"
+                    height="48px"
+                    bg="blue"
+                    mt={4}
+                    loadingText="Submitting"
+                    colorScheme={"blue.500"}
+                    onClick={() => createNewAsset()}
+                  >
+                    Continue
+                  </Button>
+                </Box>
+              )}
+            </>
+          )}
+          {result && (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
               >
-                Continue
-              </Button>
-            </Box>
+                <Box as="img" src="/grey-verified.svg" height="100px" />
+                <Heading
+                  textAlign="center"
+                  as="h6"
+                  fontWeight="bold"
+                  fontSize="24px"
+                  color="grey"
+                >
+                  New Asset Created
+                </Heading>
+              </Box>
+            </>
           )}
         </>
       </Box>
@@ -186,3 +214,21 @@ const CreateAssetSection = (props: {
 };
 
 export default CreateAssetSection;
+
+// {
+//     "clawback": "VP6EBZFXFCW4ZP3VY6HUA26X24SDM5CK4ZRO4EQJGETIEPKW6VHWM5CEQQ",
+//     "creator": "VP6EBZFXFCW4ZP3VY6HUA26X24SDM5CK4ZRO4EQJGETIEPKW6VHWM5CEQQ",
+//     "decimals": 0,
+//     "default-frozen": false,
+//     "freeze": "VP6EBZFXFCW4ZP3VY6HUA26X24SDM5CK4ZRO4EQJGETIEPKW6VHWM5CEQQ",
+//     "manager": "VP6EBZFXFCW4ZP3VY6HUA26X24SDM5CK4ZRO4EQJGETIEPKW6VHWM5CEQQ",
+//     "metadata-hash": "MTZlZmFhMzkyNGE2ZmQ5ZDNhNDgyNDc5OWE0YWM2NWQ=",
+//     "name": "Godson",
+//     "name-b64": "R29kc29u",
+//     "reserve": "VP6EBZFXFCW4ZP3VY6HUA26X24SDM5CK4ZRO4EQJGETIEPKW6VHWM5CEQQ",
+//     "total": 1000,
+//     "unit-name": "Godson",
+//     "unit-name-b64": "R29kc29u",
+//     "url": "http://mortywallet.vercel.app",
+//     "url-b64": "aHR0cDovL21vcnR5d2FsbGV0LnZlcmNlbC5hcHA="
+//   }

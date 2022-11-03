@@ -22,7 +22,7 @@ const Assets = [
     id: 1,
     name: "Algo",
     icon: "/algo.svg",
-    url: "/coins./algo",
+    url: "/coins/algo",
   },
 ];
 

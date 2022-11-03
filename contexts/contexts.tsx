@@ -282,9 +282,11 @@ const GlobalProvider = ({ children }) => {
       const xx = [];
       const yy = [];
 
-      const debits = transactions.filter(
-        (x: any) => x["payment-transaction"].receiver !== account
-      );
+      const debits = transactions.filter((x: any) => {
+        if (x["payment-transaction"]) {
+          return x["payment-transaction"].receiver !== account;
+        }
+      });
 
       const credits = transactions.filter((x: any) => x.sender !== account);
 
@@ -333,6 +335,17 @@ const GlobalProvider = ({ children }) => {
   ) => {
     const rpc = new RPC(provider);
     const result = await rpc.createAsset(name, unitName, amount);
+    return result;
+  };
+
+  const findAccountsAsset = async (address: string) => {
+    if (!provider) {
+      uiConsole("provider not initialized yet");
+      return;
+    }
+    const rpc = new RPC(provider);
+    const result = await rpc.findAssetsOnAccount(address);
+
     return result;
   };
 
@@ -505,6 +518,7 @@ const GlobalProvider = ({ children }) => {
         outTransactions,
         inTransactions,
         createAsset,
+        findAccountsAsset,
       }}
     >
       {children}

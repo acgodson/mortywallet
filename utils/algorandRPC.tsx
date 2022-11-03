@@ -308,4 +308,9 @@ export default class AlgorandRPC {
     const result = await this.printCreatedAsset(keyPair.addr, assetID);
     return result;
   };
+
+  findAssetsOnAccount = async (address: string): Promise<any> => {
+    let response = await indexerClient.lookupAccountAssets(address).do();
+    console.log(JSON.stringify(response, undefined, 2));
+  };
 }
