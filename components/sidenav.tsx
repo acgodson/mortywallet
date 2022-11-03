@@ -1,7 +1,6 @@
 import { Box, Button, Divider, Text } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaHome, FaUser } from "react-icons/fa";
+import { FaHome, FaPlusCircle, FaUser } from "react-icons/fa";
 
 const Routes = [
   {
@@ -26,7 +25,7 @@ const Assets = [
   },
 ];
 
-const SideNav = (props: { index: number }) => {
+const SideNav = (props: { index: number; onCreateAsset: () => void }) => {
   let router = useRouter();
   function navigate(path: string) {
     router.push(path);
@@ -93,6 +92,29 @@ const SideNav = (props: { index: number }) => {
             </Text>
           </Button>
         ))}
+
+        <Button
+          variant="solid"
+          type="submit"
+          width="full"
+          height="48px"
+          bg="whiteAlpha.100"
+          color="#333"
+          border="solid 1.5px whitesmoke"
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+          my={1}
+          onClick={props.onCreateAsset}
+        >
+          {/* Finish  */}
+
+          <FaPlusCircle />
+
+          <Text textAlign="center" ml={4}>
+            Create Asset
+          </Text>
+        </Button>
       </Box>
     </Box>
   );

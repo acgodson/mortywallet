@@ -24,6 +24,7 @@ import {
 import { GlobalContext } from "../contexts/contexts";
 import SideNav from "components/sidenav";
 import RecieveCryptoSection from "./recieveCrypto";
+import CreateAssetSection from "./createAsset";
 
 const SettingsSection = (props: { user: any }) => {
   const auth = getAuth();
@@ -105,7 +106,13 @@ const SettingsSection = (props: { user: any }) => {
   return (
     <>
       <>
-        <SideNav index={1} />
+        <SideNav
+          index={1}
+          onCreateAsset={() => {
+            setPage("asset");
+            setCloseSend(false);
+          }}
+        />
 
         <Box minH="100vh" w="100%" bgColor="whitesmoke" display="flex">
           {closeUpgrade && closeSend && (
@@ -245,6 +252,11 @@ const SettingsSection = (props: { user: any }) => {
                 />
               ) : page === "recieve" ? (
                 <RecieveCryptoSection onToggle={onToggle} />
+              ) : page === "asset" ? (
+                <CreateAssetSection
+                  onToggle={onToggle}
+                  // onRecieve={() => setPage("asset")}
+                />
               ) : (
                 <Box />
               )}

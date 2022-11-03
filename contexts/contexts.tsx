@@ -326,6 +326,17 @@ const GlobalProvider = ({ children }) => {
     return result;
   };
 
+  const createAsset = async (
+    name: string,
+    unitName: string,
+    amount: number
+  ) => {
+    const rpc = new RPC(provider);
+    const result = await rpc.createAsset(name, unitName, amount);
+
+    return result;
+  };
+
   //Initialize web3Auth
   useEffect(() => {
     const clientId = WEB3AUTH_CLIENT_ID;
@@ -494,6 +505,7 @@ const GlobalProvider = ({ children }) => {
         setFacebookAccessToken,
         outTransactions,
         inTransactions,
+        createAsset,
       }}
     >
       {children}

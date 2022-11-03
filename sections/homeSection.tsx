@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-
-  Slide,
-  Box,
-  useDisclosure,
-  Stack,
-} from "@chakra-ui/react";
+import { Slide, Box, useDisclosure, Stack } from "@chakra-ui/react";
 import NavBar from "components/NavBar";
 import SendNoSection from "./sendCrypto";
 import UpgradeSection from "./shopSection";
@@ -15,6 +9,7 @@ import AssetsTrade from "components/assetsTrade";
 import WalletOverView from "components/walletOverview";
 import SideNav from "components/sidenav";
 import RecieveCryptoSection from "./recieveCrypto";
+import CreateAssetSection from "./createAsset";
 
 const HomeSection = (props: { user: any }) => {
   const { logout }: any = useContext(GlobalContext);
@@ -52,7 +47,13 @@ const HomeSection = (props: { user: any }) => {
 
   return (
     <>
-      <SideNav index={0} />
+      <SideNav
+        index={0}
+        onCreateAsset={() => {
+          setPage("asset");
+          setCloseSend(false);
+        }}
+      />
 
       <Box minH="100vh" w="100%" bgColor="whitesmoke" display="flex">
         {closeUpgrade && closeSend && (
@@ -119,6 +120,11 @@ const HomeSection = (props: { user: any }) => {
               />
             ) : page === "recieve" ? (
               <RecieveCryptoSection onToggle={onToggle} />
+            ) : page === "asset" ? (
+              <CreateAssetSection
+                onToggle={onToggle}
+                // onRecieve={() => setPage("asset")}
+              />
             ) : (
               <Box />
             )}

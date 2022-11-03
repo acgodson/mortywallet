@@ -2,7 +2,7 @@
 
 ## An attempt to create a utlity algorand wallet for the common internet user
 
-One of the challenges hindering largescale adoption of blockchain is security, storage and transfer of seed-phrases/private keys [read]()
+One of the challenges hindering largescale adoption of blockchain is security, storage and transfer of seed-phrases/private keys.
 
 Morty Wallet is a flexible wallet that permits users to receive/send money or assets across the world, and pay for utility bills (via an integrated social marketplace)
 
@@ -16,11 +16,11 @@ Leveraging [Firebase JWT]() & custom [web3auth](), morty abolishes the struggle 
 
 - **Web2-like Onboarding** - Sign up and manage your wallet using your familiar email and password
 
-- **Sign & Send Transactions** - Sign and Send transactions over algorand blockchain (testnet)
+- **Sign & Send Transactions** - Sign and Send transactions on the algorand blockchain (testnet)
 
 - **Data Visualization** - **Trading Charts** from ALGO closing prices within last 5 days, and also **Pie Chart** illustrating personal expenditure and income over time
 
-- **Social Marketplace** - Pay for services listed on the timeline Twitter or Facebook pages/profiles of your interest using your algowallet
+- **Social Marketplace** - Pay for services listed on the Twitter timeline or Facebook pages/profiles of your interest using your algowallet
 
 - **Social Marketplace for businesses and Social Media Infuencers** - Create a verifiable wallet/store by signing in with your Twitter of Facebook pages, and let your users pay for assets or services posted on your timeline from [mortystore]()
 
@@ -84,7 +84,7 @@ Morty-frontend-web is currently built on [Nextjs]() and styled with [Chakra UI](
   Sellers can create promos and reward customers with redeemable tokens as they make transactions
 
 - **Morty App**
-  Implementing web3auth share brings the possiblity of logging into the same wallet on multiple platforms. During this hack, we already started an Android implementation using flutter Check out [morty-wallet-android]()
+  Implementing web3auth share brings the possiblity of logging into the same wallet on multiple platforms. During this hack, we already started an Android implementation using flutter Check out [morty-wallet-android](https://github.com/acgodson/morty-waller-android)
 
 ## Contributors
 

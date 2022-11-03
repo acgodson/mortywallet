@@ -73,7 +73,13 @@ const Algo = () => {
 
   return (
     <>
-      <SideNav index={0} />
+      <SideNav
+        index={0}
+        onCreateAsset={() => {
+          setPage("asset");
+          setCloseSend(false);
+        }}
+      />
 
       <Box minH="100vh" w="100%" bgColor="whitesmoke" display="flex">
         {closeUpgrade && closeSend && (
@@ -304,12 +310,8 @@ const MyTransactions = () => {
                 <Tr>
                   {/* <Td>{x.created.toDate()}</Td> */}
                   <Td>{index + 1}</Td>
-                  <Td  w="30px">
-                    {x.id}
-                  </Td>
-                  <Td w="30px">
-                    {x.sender ? x.sender : "me"}
-                  </Td>
+                  <Td w="30px">{x.id}</Td>
+                  <Td w="30px">{x.sender ? x.sender : "me"}</Td>
                   {/* <Td isTruncated={true} w="30px">
                     {x.reciever ? x.reciever : "me"}
                   </Td> */}

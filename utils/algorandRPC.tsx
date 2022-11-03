@@ -163,4 +163,144 @@ export default class AlgorandRPC {
       return false;
     }
   };
+
+  printCreatedAsset = async (
+    account: string,
+    assetid: number
+  ): Promise<any> => {
+    const client = await this.makeClient();
+    let i: number;
+    let accountInfo = await client.accountInformation(account).do();
+
+    for (i = 0; i < accountInfo["created-assets"].length; i++) {
+      let scrutinizedAsset = accountInfo["created-assets"][i];
+      if (scrutinizedAsset["index"] == assetid) {
+        console.log("AssetID = " + scrutinizedAsset["index"]);
+        let myparms = JSON.stringify(scrutinizedAsset["params"], undefined, 2);
+        console.log("parms = " + myparms);
+        return myparms;
+      }
+    }
+  };
+
+  printAssetHolding = async (
+    account: string,
+    assetid: number
+  ): Promise<any> => {
+    const client = await this.makeClient();
+    let i: number;
+
+    const parami = [];
+    let accountInfo = await client.accountInformation(account).do();
+    for (i = 0; i < accountInfo["assets"].length; i++) {
+      let scrutinizedAsset = accountInfo["assets"][i];
+      if (scrutinizedAsset["asset-id"] == assetid) {
+        let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+        console.log("assetholdinginfo = " + myassetholding);
+        parami.push(myassetholding);
+        return parami;
+      }
+    }
+  };
+
+  createAsset = async (
+    name: string,
+    unitName: string,
+    amount: number
+  ): Promise<any> => {
+    const keyPair = await this.getAlgorandKeyPair();
+    const client = await this.makeClient();
+    const params = await client.getTransactionParams().do();
+
+    //Store Manager
+    const manager = keyPair.addr;
+    let addr = keyPair.addr;
+    let note = undefined;
+    let defaultFrozen = false;
+    let decimals = 0;
+    let totalIssuance = amount;
+    let assetName = name;
+    let assetURL = "";
+    let reserve = keyPair.addr;
+    let freeze = keyPair.addr;
+    let clawback = keyPair.addr;
+
+    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
+      addr,
+      note,
+      totalIssuance,
+      manager,
+      reserve,
+      unitName,
+      assetName,
+      freeze,
+      clawback,
+      params
+    );
+
+    const rawSignedTxn = ctxn.signTxn(keyPair.sk.sk);
+    let ctx = await client.sendRawTransaction(rawSignedTxn).do();
+
+    let assetID = null;
+
+    // Wait for confirmation
+    let confirmedTxn = await algosdk.waitForConfirmation(client, ctx.txId, 4);
+    //Get the completed Transaction
+    console.log(
+      "Transaction " +
+        ctx.txId +
+        " confirmed in round " +
+        confirmedTxn["confirmed-round"]
+    );
+    const result = await this.printCreatedAsset(keyPair.addr, assetID);
+    return result;
+  };
+
+  acceptAsset = async (assetID: number, message: string) => {
+    const keyPair = await this.getAlgorandKeyPair();
+    const client = await this.makeClient();
+    const params = await client.getTransactionParams().do();
+
+    const enc = new TextEncoder();
+    const note = enc.encode(message);
+
+    //comment out the next two lines to use suggested fee
+    // params.fee = 1000;
+    // params.flatFee = true;
+
+    let sender = keyPair.addr;
+    let recipient = sender;
+    let revocationTarget = undefined;
+    let closeRemainderTo = undefined;
+    let assetURL = "";
+    const amount = 0;
+
+    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
+      sender,
+      recipient,
+      closeRemainderTo,
+      revocationTarget,
+      amount,
+      note,
+      assetID,
+      params
+    );
+
+    const rawSignedTxn = opttxn.signTxn(keyPair.sk.sk);
+    let ctx = await client.sendRawTransaction(rawSignedTxn).do();
+
+    // Wait for confirmation
+    let confirmedTxn = await algosdk.waitForConfirmation(client, ctx.txId, 4);
+    //Get the completed Transaction
+    console.log(
+      "Transaction " +
+        ctx.txId +
+        " confirmed in round " +
+        confirmedTxn["confirmed-round"]
+    );
+    assetID = confirmedTxn["asset-index"];
+
+    const result = await this.printCreatedAsset(keyPair.addr, assetID);
+    return result;
+  };
 }
