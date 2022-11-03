@@ -406,6 +406,7 @@ const SignUpPage = () => {
               placeholder="Select country"
               required={true}
               size="lg"
+              value={country}
               border="solid 1.5px black"
               borderRadius={4}
               bg="white"
