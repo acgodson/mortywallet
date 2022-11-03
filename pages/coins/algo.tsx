@@ -324,7 +324,7 @@ const MyTransactions = () => {
                   {/* <Td>{x.created.toDate()}</Td> */}
                   <Td>{index + 1}</Td>
                   <Td w="15px">
-                    <Text as="span" width="15px" noOfLines={1} isTruncated>
+                    <Text as="span" width="15px" noOfLines={1}>
                       {x.id}
                     </Text>
                   </Td>
