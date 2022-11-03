@@ -21,7 +21,8 @@ const Assets = [
   {
     id: 1,
     name: "Algo",
-    url: "/algo.svg",
+    icon: "/algo.svg",
+    url: "/coins./algo",
   },
 ];
 
@@ -84,8 +85,9 @@ const SideNav = (props: { index: number; onCreateAsset: () => void }) => {
             justifyContent="flex-start"
             alignItems="center"
             my={1}
+            onClick={() => navigate(x.url)}
           >
-            <Box as="img" alt={x.name} src={x.url} width="30px" />
+            <Box as="img" alt={x.name} src={x.icon} width="30px" />
 
             <Text textAlign="center" ml={4}>
               {x.name}

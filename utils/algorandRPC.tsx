@@ -204,7 +204,7 @@ export default class AlgorandRPC {
   };
 
   createAsset = async (
-    name: string,
+    assetName: string,
     unitName: string,
     amount: number
   ): Promise<any> => {
@@ -212,36 +212,38 @@ export default class AlgorandRPC {
     const client = await this.makeClient();
     const params = await client.getTransactionParams().do();
 
-    //Store Manager
-    const manager = keyPair.addr;
-    let addr = keyPair.addr;
     let note = undefined;
+    let addr = keyPair.addr;
     let defaultFrozen = false;
     let decimals = 0;
-    let totalIssuance = amount;
-    let assetName = name;
-    let assetURL = "";
+    let totalIssuance = 1000;
+    let assetURL = "http://mortywallet.vercel.app";
+    let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
+    let manager = keyPair.addr;
     let reserve = keyPair.addr;
     let freeze = keyPair.addr;
     let clawback = keyPair.addr;
 
-    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
+    // signing and sending "txn" allows "addr" to create an asset
+    let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(
       addr,
       note,
       totalIssuance,
+      decimals,
+      defaultFrozen,
       manager,
       reserve,
-      unitName,
-      assetName,
       freeze,
       clawback,
+      unitName,
+      assetName,
+      assetURL,
+      assetMetadataHash,
       params
     );
 
-    const rawSignedTxn = ctxn.signTxn(keyPair.sk.sk);
+    const rawSignedTxn = txn.signTxn(keyPair.sk);
     let ctx = await client.sendRawTransaction(rawSignedTxn).do();
-
-    let assetID = null;
 
     // Wait for confirmation
     let confirmedTxn = await algosdk.waitForConfirmation(client, ctx.txId, 4);
@@ -252,6 +254,9 @@ export default class AlgorandRPC {
         " confirmed in round " +
         confirmedTxn["confirmed-round"]
     );
+
+    const assetID = confirmedTxn["asset-index"];
+
     const result = await this.printCreatedAsset(keyPair.addr, assetID);
     return result;
   };

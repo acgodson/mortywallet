@@ -333,7 +333,6 @@ const GlobalProvider = ({ children }) => {
   ) => {
     const rpc = new RPC(provider);
     const result = await rpc.createAsset(name, unitName, amount);
-
     return result;
   };
 

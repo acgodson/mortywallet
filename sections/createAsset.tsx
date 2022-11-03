@@ -41,13 +41,14 @@ const CreateAssetSection = (props: {
       }
     } catch (e) {
       setSubmitting(false);
-      toast({
-        title: "Error",
-        description: e,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
+      console.log(e);
+      //   toast({
+      //     title: "Error",
+      //     description: e,
+      //     status: "error",
+      //     duration: 9000,
+      //     isClosable: true,
+      //   });
     }
   }
 
@@ -100,9 +101,9 @@ const CreateAssetSection = (props: {
             />
           </Box>
 
-          {submitting ? (
-            <CustomLoading />
-          ) : (
+          {submitting && <CustomLoading />}
+
+          {!submitting && (
             <Box>
               <FormControl mt={10} px={3}>
                 <FormLabel color="black.200" ml={1.5} key={"name"}>
@@ -143,14 +144,14 @@ const CreateAssetSection = (props: {
               </FormControl>
 
               <FormControl mt={10} px={3}>
-                <FormLabel color="black.200" ml={1.5} key={"unit"}>
+                <FormLabel color="black.200" ml={1.5} key={"issue"}>
                   Total issue
                 </FormLabel>
                 <Input
-                  id="name"
+                  id="issue"
                   color="grey"
                   fontSize="sm"
-                  type={"text"}
+                  type={"number"}
                   placeholder="Enter Asset unit name"
                   required={true}
                   readOnly={false}
